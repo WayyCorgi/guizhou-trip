@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>贵州7天自驾攻略 · 9.26 - 10.2</title>
+<style>
+  :root {
+    --bg: #f5f3ef;
+    --card: #ffffff;
+    --text: #2c2416;
+    --muted: #6b5e4a;
+    --accent: #2e7d32;
+    --accent2: #e67e22;
+    --tag-bg: #e8f5e9;
+    --border: #e0dbd1;
+    --highlight: #fef9f0;
+    --tab-active-bg: #fff;
+    --tab-bg: #e8e4dc;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 24px 16px 48px;
+  }
+
+  .container { max-width: 800px; margin: 0 auto; }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center;
+    padding: 40px 24px 28px;
+  }
+  .hero h1 {
+    font-size: 2rem;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .hero .subtitle {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: 14px;
+  }
+  .hero .route-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+  .route-bar .sep { color: #ccc; }
+
+  /* ── Tabs ── */
+  .tab-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: center;
+    margin-bottom: 24px;
+    position: sticky;
+    top: 8px;
+    z-index: 10;
+    padding: 8px;
+    background: rgba(245,243,239,.85);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+  }
+  .tab-btn {
+    padding: 7px 14px;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--tab-bg);
+    color: var(--muted);
+    transition: all .18s;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .tab-btn:hover { background: #dcd6c8; }
+  .tab-btn.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(46,125,50,.25);
+  }
+
+  /* ── Tab content ── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── Overview cards ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .ov-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    cursor: pointer;
+    transition: box-shadow .18s, transform .18s;
+  }
+  .ov-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
+    transform: translateY(-2px);
+  }
+  .ov-card .ov-num {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .ov-card .ov-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 4px 0 2px;
+  }
+  .ov-card .ov-date {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .ov-card .ov-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    background: var(--tag-bg);
+    color: var(--accent);
+    padding: 1px 8px;
+    border-radius: 10px;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* ── Day panel ── */
+  .day-panel {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  }
+  .day-panel-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .day-panel-header .day-num {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .day-panel-header .day-date {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .day-panel-header .day-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .day-panel-header .day-tag {
+    font-size: 0.78rem;
+    background: var(--tag-bg);
+    color: var(--accent);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  /* ── Timeline ── */
+  .timeline { margin-bottom: 14px; }
+  .tl-row {
+    display: flex;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 0.93rem;
+  }
+  .tl-time {
+    min-width: 100px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .tl-desc { flex: 1; }
+
+  .day-panel h4 {
+    font-size: 0.95rem;
+    margin: 16px 0 6px;
+    color: #4a3f2f;
+  }
+  .day-panel ul, .day-panel ol {
+    padding-left: 20px;
+    font-size: 0.92rem;
+    margin-bottom: 8px;
+  }
+  .day-panel li { margin-bottom: 3px; }
+  .day-panel blockquote {
+    background: var(--highlight);
+    border-left: 3px solid var(--accent2);
+    margin: 10px 0;
+    padding: 8px 14px;
+    font-size: 0.9rem;
+    border-radius: 0 8px 8px 0;
+    color: #5c4a2e;
+  }
+  .day-panel pre {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin: 6px 0;
+    overflow-x: auto;
+  }
+
+  /* ── Tables ── */
+  .mini-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 6px 0 12px;
+  }
+  .mini-table th {
+    text-align: left;
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .mini-table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .drive-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    margin: 10px 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+    background: #faf8f4;
+    border-radius: 8px;
+  }
+
+  /* ── Info section (吃住行) ── */
+  .info-section {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  }
+  .info-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  .cost-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 24px;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+  .cost-grid .cost-total {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+    margin-top: 4px;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .cost-grid .label { color: var(--muted); }
+  .cost-grid .val { text-align: right; }
+
+  .warn-box {
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    font-size: 0.9rem;
+  }
+  .warn-box h4 { margin-top: 0; color: #e65100; }
+  .checklist {
+    list-style: none;
+    padding-left: 0;
+  }
+  .checklist li::before { content: "⬜ "; }
+
+  /* ── Nav arrows ── */
+  .day-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  .day-nav button {
+    padding: 8px 18px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--text);
+    transition: all .15s;
+  }
+  .day-nav button:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .footer-note {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-top: 28px;
+  }
+
+  @media (max-width: 600px) {
+    .overview-grid { grid-template-columns: 1fr; }
+    .day-panel { padding: 18px 14px; }
+    .hero h1 { font-size: 1.5rem; }
+    .tl-row { font-size: 0.85rem; }
+    .tl-time { min-width: 72px; }
+    .cost-grid { grid-template-columns: 1fr; }
+    .cost-grid .val { text-align: left; }
+    .tab-btn { padding: 6px 10px; font-size: 0.78rem; }
+    .tab-nav { gap: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <div class="hero">
+    <h1>🏔️ 贵州 7 天自驾攻略</h1>
+    <p class="subtitle">2026.9.26 – 10.2 · 温州 ⇄ 贵阳 · 全程自驾</p>
+    <div class="route-bar">
+      <span>🏯 镇远</span><span class="sep">→</span>
+      <span>⛰️ 梵净山</span><span class="sep">→</span>
+      <span>🏘️ 西江</span><span class="sep">→</span>
+      <span>💧 大小七孔</span><span class="sep">→</span>
+      <span>🌊 黄果树</span><span class="sep">→</span>
+      <span>🛶 南江大峡谷</span><span class="sep">→</span>
+      <span>🏙️ 贵阳</span>
+    </div>
+  </div>
+
+  <!-- ═══════════ TAB NAV ═══════════ -->
+  <nav class="tab-nav" id="tabNav">
+    <button class="tab-btn active" data-tab="overview">📋 概览</button>
+    <button class="tab-btn" data-tab="d1">Day 1</button>
+    <button class="tab-btn" data-tab="d2">Day 2</button>
+    <button class="tab-btn" data-tab="d3">Day 3</button>
+    <button class="tab-btn" data-tab="d4">Day 4</button>
+    <button class="tab-btn" data-tab="d5">Day 5</button>
+    <button class="tab-btn" data-tab="d6">Day 6</button>
+    <button class="tab-btn" data-tab="d7">Day 7</button>
+    <button class="tab-btn" data-tab="info">🍜 吃住行</button>
+  </nav>
+
+  <!-- ═══════════ PANEL: 概览 ═══════════ -->
+  <div class="tab-panel active" id="tab-overview">
+    <div class="overview-grid">
+      <div class="ov-card" onclick="switchTab('d1')">
+        <div class="ov-num">Day 1 · 9/26 周六</div>
+        <div class="ov-title">🏯 镇远古镇</div>
+        <div class="ov-tag">人文</div>
+      </div>
+      <div class="ov-card" onclick="switchTab('d2')">
+        <div class="ov-num">Day 2 · 9/27 周日</div>
+        <div class="ov-title">⛰️ 梵净山</div>
+        <div class="ov-tag">自然</div>
+      </div>
+      <div class="ov-card" onclick="switchTab('d3')">
+        <div class="ov-num">Day 3 · 9/28 周一</div>
+        <div class="ov-title">🏘️ 西江千户苗寨</div>
+        <div class="ov-tag">人文</div>
+      </div>
+      <div class="ov-card" onclick="switchTab('d4')">
+        <div class="ov-num">Day 4 · 9/29 周二</div>
+        <div class="ov-title">💧 荔波大小七孔</div>
+        <div class="ov-tag">自然</div>
+      </div>
+      <div class="ov-card" onclick="switchTab('d5')">
+        <div class="ov-num">Day 5 · 9/30 周三</div>
+        <div class="ov-title">🌊 黄果树瀑布</div>
+        <div class="ov-tag">自然</div>
+      </div>
+      <div class="ov-card" onclick="switchTab('d6')">
+        <div class="ov-num">Day 6 · 10/1 周四</div>
+        <div class="ov-title">🛶 南江大峡谷漂流</div>
+        <div class="ov-tag">户外</div>
+      </div>
+      <div class="ov-card" onclick="switchTab('d7')">
+        <div class="ov-num">Day 7 · 10/2 周五</div>
+        <div class="ov-title">🏙️ 贵阳收尾 · 返程</div>
+        <div class="ov-tag">博物馆</div>
+      </div>
+    </div>
+
+    <div class="info-section" style="text-align:center;padding:16px;">
+      <img src="route-map.jpeg" alt="贵州自驾路线图" style="max-width:100%;border-radius:10px;">
+    </div>
+
+    <div class="info-section">
+      <h2>📊 全程速览</h2>
+      <table class="mini-table">
+        <tr><th>日期</th><th>白天</th><th>傍晚/晚间</th><th>住宿</th></tr>
+        <tr><td>9/26</td><td>取车 → 🏯 镇远（3h），古镇+夜景</td><td>🚗 →梵净山（1.5h）</td><td>梵净山</td></tr>
+        <tr><td>9/27</td><td>⛰️ 梵净山全天</td><td>🚗 →西江（2.5h）</td><td>西江</td></tr>
+        <tr><td>9/28</td><td>🏘️ 苗寨晨雾+全天漫游</td><td>🚗 →荔波（3.5h）</td><td>荔波</td></tr>
+        <tr><td>9/29</td><td>💧 大小七孔全天</td><td>🚗 →安顺（4h）</td><td>安顺</td></tr>
+        <tr><td>9/30</td><td>🌊 黄果树全天</td><td>🚗 →贵阳（1.5h）</td><td>贵阳</td></tr>
+        <tr><td>10/1</td><td>🛶 南江大峡谷漂流</td><td>—</td><td>贵阳</td></tr>
+        <tr><td>10/2</td><td>🏛️ 贵州省博物馆 → 逛吃</td><td>—</td><td>🏠</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL: Day 1 ═══════════ -->
+  <div class="tab-panel" id="tab-d1">
+    <div class="day-panel">
+      <div class="day-panel-header">
+        <span class="day-num">Day 1</span>
+        <span class="day-date">9/26 周六</span>
+        <span class="day-title">🏯 镇远古镇</span>
+        <span class="day-tag">人文</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-row"><span class="tl-time">~13:00</span><span class="tl-desc">✈️ 落地贵阳龙洞堡机场，取车</span></div>
+        <div class="tl-row"><span class="tl-time">13:00–16:00</span><span class="tl-desc">🚗 贵阳机场 → 镇远古镇（约 3h）&nbsp;<a href="https://uri.amap.com/navigation?from=贵阳龙洞堡机场&to=镇远古镇" target="_blank" style="font-size:0.8rem;color:var(--accent);">🧭 导航</a></span></div>
+        <div class="tl-row"><span class="tl-time">16:00–17:00</span><span class="tl-desc">🏯 古巷道漫游：四方井巷 → 复兴巷 → 冲子口巷 → 祝圣桥</span></div>
+        <div class="tl-row"><span class="tl-time">17:00–18:00</span><span class="tl-desc">🍜 晚饭：<strong>镇远老味道</strong> — 豆花烤鱼</span></div>
+        <div class="tl-row"><span class="tl-time">18:00–20:00</span><span class="tl-desc">🌙 夜游舞阳河，看两岸灯火倒影&nbsp;<a href="https://uri.amap.com/search?keyword=镇远祝圣桥码头" target="_blank" style="font-size:0.8rem;color:var(--accent);">🧭 祝圣桥码头</a></span></div>
+        <div class="tl-row"><span class="tl-time">20:00–21:30</span><span class="tl-desc">🚗 镇远 → 梵净山（约 1.5h）&nbsp;<a href="https://uri.amap.com/navigation?from=镇远古镇&to=铜仁市江口县东谷民宿梵净山店" target="_blank" style="font-size:0.8rem;color:var(--accent);">🧭 导航</a></span></div>
+        <div class="tl-row"><span class="tl-time">~21:30</span><span class="tl-desc">🏨 入住東谷观麓</span></div>
+      </div>
+
+      <h4>🗺️ 一小时古巷道路线</h4>
+      <pre style="margin:6px 0;">四方井巷（15min）→ 复兴巷（15min）→ 冲子口巷（10min）→ 祝圣桥（10min）→ 沿河走回（10min）</pre>
+      <ul>
+        <li>从新大桥北岸进入，不走回头路，一小时刚好</li>
+      </ul>
+
+      <h4>🍜 晚饭</h4>
+      <p style="font-size:0.92rem;">
+        📍 <a href="https://uri.amap.com/search?keyword=镇远古镇老味道" target="_blank" style="color:var(--accent);">镇远老味道</a> — 豆花烤鱼
+      </p>
+
+      <blockquote>🌙 饭后沿河边往祝圣桥方向走，官方夜游码头上船（¥60/人，约 40min），两岸灯火倒映水面，比白天更有味道。</blockquote>
+
+      <h4>🏨 住宿</h4>
+      <p style="font-size:0.92rem;">
+        📍 <a href="https://uri.amap.com/search?keyword=铜仁市江口县东谷民宿梵净山店" target="_blank" style="color:var(--accent);">東谷观麓</a> · 温馨大床房 · 距梵净山 900m · 免费停车
+      </p>
+
+      <blockquote>⚠️ <strong>提前准备：</strong>梵净山门票 9/24 早上 7 点预约（微信「梵净山生态旅游区」），约 9/27 最早时段。</blockquote>
+
+      <div class="day-nav">
+        <span></span>
+        <button onclick="switchTab('d2')">Day 2 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL: Day 2 ═══════════ -->
+  <div class="tab-panel" id="tab-d2">
+    <div class="day-panel">
+      <div class="day-panel-header">
+        <span class="day-num">Day 2</span>
+        <span class="day-date">9/27 周日</span>
+        <span class="day-title">⛰️ 梵净山</span>
+        <span class="day-tag">自然</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-row"><span class="tl-time">7:00</span><span class="tl-desc">起床，寨沙侗寨吃碗粉</span></div>
+        <div class="tl-row"><span class="tl-time">8:00</span><span class="tl-desc">东门入园，缆车登顶</span></div>
+        <div class="tl-row"><span class="tl-time">8:30–14:00</span><span class="tl-desc">⛰️ 蘑菇石 → 红云金顶 → （体力够）老金顶 → 承恩寺</span></div>
+        <div class="tl-row"><span class="tl-time">15:00</span><span class="tl-desc">下山，午饭</span></div>
+        <div class="tl-row"><span class="tl-time">16:00–18:30</span><span class="tl-desc">🚗 梵净山 → 西江千户苗寨（约 2.5h）</span></div>
+        <div class="tl-row"><span class="tl-time">~19:00</span><span class="tl-desc">🌙 抵达西江，入住，直奔观景台看<strong>万家灯火</strong></span></div>
+      </div>
+
+      <h4>🗺️ 山上路线</h4>
+      <pre>东门入园 → 缆车（20min）→ 森林栈道 → 蘑菇石
+                                          ↓
+                             ┌────────────┴────────────┐
+                             ↓                         ↓
+                      老金顶（2494m）          红云金顶（2336m）⭐
+                             ↓                         ↓
+                             └────────────┬────────────┘
+                                          ↓
+                                      承恩寺 → 缆车下山</pre>
+      <ul>
+        <li><strong>红云金顶</strong>（1.5–2h）— 天空之城，垂直攀爬，此行最震撼，<em>优先去</em></li>
+        <li><strong>蘑菇石</strong>（30min）— 打卡地标</li>
+        <li><strong>老金顶</strong>（1–1.5h）— 最高峰，视野最开阔，<em>酌情</em></li>
+      </ul>
+
+      <blockquote>山上只有小卖部，建议自带干粮。下山后在江口县城或寨沙侗寨吃饭。</blockquote>
+
+      <h4>🍜 午饭（梵净山下）</h4>
+      <table class="mini-table">
+        <tr><th>推荐</th><th>菜</th><th>人均</th></tr>
+        <tr><td>寨沙侗寨农家乐</td><td>社饭、江口米豆腐</td><td>¥40–60</td></tr>
+      </table>
+
+      <h4>🏨 西江住宿</h4>
+      <table class="mini-table">
+        <tr><th>档次</th><th>推荐</th><th>参考价</th></tr>
+        <tr><td>观景民宿</td><td>西江998客栈、西江想宿</td><td>¥350–550</td></tr>
+        <tr><td>经济</td><td>苗寨内老房子客栈</td><td>¥180–280</td></tr>
+      </table>
+      <blockquote>💡 <strong>住半山腰观景台附近！</strong> 躺在床上看万家灯火。不要住山脚，什么都看不到。</blockquote>
+
+      <div class="drive-note">🚗 梵净山 → 西江 约 2.5h 全程高速 | 车停景区大门停车场，坐接驳车进寨</div>
+
+      <div class="day-nav">
+        <button onclick="switchTab('d1')">← Day 1</button>
+        <button onclick="switchTab('d3')">Day 3 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL: Day 3 ═══════════ -->
+  <div class="tab-panel" id="tab-d3">
+    <div class="day-panel">
+      <div class="day-panel-header">
+        <span class="day-num">Day 3</span>
+        <span class="day-date">9/28 周一</span>
+        <span class="day-title">🏘️ 西江千户苗寨</span>
+        <span class="day-tag">人文</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-row"><span class="tl-time">6:00</span><span class="tl-desc">🌫️ 观景台看<strong>苗寨晨雾</strong>（值回半程旅费）</span></div>
+        <div class="tl-row"><span class="tl-time">7:00–16:00</span><span class="tl-desc">🏘️ 苗寨全天漫游：田园 → 博物馆 → 嘎歌古巷 → 长桌宴 → 芦笙场</span></div>
+        <div class="tl-row"><span class="tl-time">16:00–19:30</span><span class="tl-desc">🚗 西江 → 荔波（约 3.5h）</span></div>
+        <div class="tl-row"><span class="tl-time">~20:00</span><span class="tl-desc">🏨 入住荔波</span></div>
+      </div>
+
+      <h4>🗺️ 苗寨怎么玩（不要赶景点，慢慢走）</h4>
+      <ul>
+        <li><strong>晨雾</strong> 🌫️ — 6:00 前到观景台，吊脚楼在薄雾里若隐若现</li>
+        <li><strong>田园观光区</strong> — 山脚稻田、水车、风雨桥，出片圣地</li>
+        <li><strong>苗寨博物馆</strong>（免费）— 苗族迁徙史，30min</li>
+        <li><strong>嘎歌古巷</strong> — 蜡染、古法造纸、银饰作坊，可体验</li>
+        <li><strong>长桌宴</strong> — 高山流水敬酒仪式，¥60–80/人</li>
+        <li><strong>芦笙场</strong> — 上午/下午各一场苗族歌舞表演</li>
+      </ul>
+
+      <blockquote>🍺 找家半山腰咖啡馆，对着苗寨发呆一小时。晚上的万家灯火 D2 已经看了，今天看够白天的苗寨。</blockquote>
+
+      <h4>🍜 西江吃什么</h4>
+      <table class="mini-table">
+        <tr><th>推荐</th><th>菜</th><th>人均</th></tr>
+        <tr><td>侯家庄</td><td>酸汤牛肉、腊肉拼盘</td><td>¥60</td></tr>
+        <tr><td>草堂茶居</td><td>喝茶+简餐，观景位</td><td>¥50</td></tr>
+        <tr><td>路边摊</td><td>现打糍粑裹黄豆粉</td><td>¥5</td></tr>
+      </table>
+
+      <h4>🏨 荔波住宿</h4>
+      <table class="mini-table">
+        <tr><th>档次</th><th>推荐</th><th>参考价</th></tr>
+        <tr><td>舒适</td><td>荔波山水皇家驿栈、荔波饭店</td><td>¥300–500</td></tr>
+        <tr><td>经济</td><td>荔波古镇内民宿</td><td>¥150–250</td></tr>
+      </table>
+
+      <div class="drive-note">🚗 西江 → 荔波 约 3.5h 全程高速 | 9月底天黑约 18:30，前半段天亮，后半段夜间行车注意安全</div>
+
+      <div class="day-nav">
+        <button onclick="switchTab('d2')">← Day 2</button>
+        <button onclick="switchTab('d4')">Day 4 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL: Day 4 ═══════════ -->
+  <div class="tab-panel" id="tab-d4">
+    <div class="day-panel">
+      <div class="day-panel-header">
+        <span class="day-num">Day 4</span>
+        <span class="day-date">9/29 周二</span>
+        <span class="day-title">💧 荔波大小七孔</span>
+        <span class="day-tag">自然</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-row"><span class="tl-time">7:30</span><span class="tl-desc">🎯 <strong>第一波入园！</strong> 西门进</span></div>
+        <div class="tl-row"><span class="tl-time">7:30–12:00</span><span class="tl-desc">💧 小七孔精华段</span></div>
+        <div class="tl-row"><span class="tl-time">12:00–13:00</span><span class="tl-desc">午饭</span></div>
+        <div class="tl-row"><span class="tl-time">13:00–15:00</span><span class="tl-desc">大七孔 / 继续小七孔收尾</span></div>
+        <div class="tl-row"><span class="tl-time">15:30–19:30</span><span class="tl-desc">🚗 荔波 → 安顺（约 4h）</span></div>
+        <div class="tl-row"><span class="tl-time">~20:00</span><span class="tl-desc">🏨 入住安顺 → 🍜 <strong>夜市走起</strong></span></div>
+      </div>
+
+      <h4>🗺️ 小七孔路线</h4>
+      <pre>西门进 → 卧龙潭 → 鸳鸯湖 → 翠谷瀑布 → 水上森林 →
+拉雅瀑布 → 68级跌水瀑布 → 小七孔古桥 → 东门出</pre>
+      <ul>
+        <li><strong>卧龙潭</strong> — 碧蓝水面像蓝宝石，开场即巅峰</li>
+        <li><strong>鸳鸯湖</strong> — 🛶 划船进水上森林迷宫（¥30/人），不划船等于白来</li>
+        <li><strong>水上森林</strong> — 踩着石头在溪流中穿行，踩水的快乐</li>
+        <li><strong>68 级跌水瀑布</strong> — 层层叠叠的瀑布群，沿路步行 30min</li>
+        <li><strong>小七孔古桥</strong> — 清代古桥，终点打卡</li>
+      </ul>
+
+      <blockquote>💡 鸳鸯湖划船和水上森林是两个男生会觉得好玩的地方，不要跳过。9:30 之后旅行团涌入，7:30 必须到门口。</blockquote>
+
+      <h4>🗺️ 大七孔（可选，1–1.5h）</h4>
+      <ul>
+        <li><strong>天生桥</strong> — 天然石桥横跨峡谷，气势逼人</li>
+        <li><strong>恐怖峡</strong> — 两岸绝壁合拢，仰望一线天</li>
+      </ul>
+
+      <h4>🍜 吃在荔波</h4>
+      <table class="mini-table">
+        <tr><th>推荐</th><th>菜</th><th>人均</th></tr>
+        <tr><td>瑶家土菜馆</td><td>酸肉、竹筒饭</td><td>¥50</td></tr>
+        <tr><td>荔波古镇夜市</td><td>烤鱼、冰粉</td><td>¥40</td></tr>
+      </table>
+
+      <h4>🏨 安顺住宿</h4>
+      <table class="mini-table">
+        <tr><th>档次</th><th>推荐</th><th>参考价</th></tr>
+        <tr><td>舒适</td><td>安顺百灵希尔顿逸林</td><td>¥350–500</td></tr>
+        <tr><td>经济</td><td>安顺市区连锁酒店</td><td>¥150–250</td></tr>
+      </table>
+
+      <blockquote>🍜 <strong>安顺夜市是此行最强美食阵地！</strong> 入住后直奔儒林路 / 新天地美食街。夺夺粉、裹卷、烤小肠，绝了。</blockquote>
+
+      <div class="drive-note">🚗 荔波 → 安顺 约 4h 全程高速 | 全程最难的一程，建议两人换着开</div>
+
+      <div class="day-nav">
+        <button onclick="switchTab('d3')">← Day 3</button>
+        <button onclick="switchTab('d5')">Day 5 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL: Day 5 ═══════════ -->
+  <div class="tab-panel" id="tab-d5">
+    <div class="day-panel">
+      <div class="day-panel-header">
+        <span class="day-num">Day 5</span>
+        <span class="day-date">9/30 周三</span>
+        <span class="day-title">🌊 黄果树瀑布</span>
+        <span class="day-tag">自然</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-row"><span class="tl-time">7:00</span><span class="tl-desc">安顺出发 → 黄果树（40min）</span></div>
+        <div class="tl-row"><span class="tl-time">8:00–10:30</span><span class="tl-desc"><strong>天星桥</strong> — 只走后半段，银链坠潭瀑布是隐藏大 Boss</span></div>
+        <div class="tl-row"><span class="tl-time">10:30–12:30</span><span class="tl-desc"><strong>大瀑布</strong> — 穿水帘洞，必湿身</span></div>
+        <div class="tl-row"><span class="tl-time">13:00–14:00</span><span class="tl-desc"><strong>陡坡塘</strong> — 最宽瀑布，《西游记》片尾取景地</span></div>
+        <div class="tl-row"><span class="tl-time">15:00–16:30</span><span class="tl-desc">🚗 黄果树 → 贵阳（约 1.5h）</span></div>
+        <div class="tl-row"><span class="tl-time">傍晚</span><span class="tl-desc">🏨 入住贵阳 → 青云路夜市</span></div>
+      </div>
+
+      <h4>🗺️ 游览顺序（关键）</h4>
+      <ol>
+        <li><strong>天星桥</strong>（2.5h）— 上午光线好，精华全在后半段，跟着指示牌走「后半段」入口</li>
+        <li><strong>大瀑布</strong>（2h）— 核心景区，水帘洞必穿</li>
+        <li><strong>陡坡塘</strong>（0.5–1h）— 收尾轻松</li>
+      </ol>
+
+      <blockquote>💡 8:00 前到天星桥入口。国庆前一天人少，7:40 第一波进体验更佳。带雨衣！水帘洞必湿。</blockquote>
+
+      <h4>🍜 午饭</h4>
+      <p style="font-size:0.9rem;color:var(--muted);">景区门口随便吃，或者撑到下午回贵阳吃。</p>
+
+      <h4>🏨 贵阳住宿</h4>
+      <table class="mini-table">
+        <tr><th>档次</th><th>推荐区域</th><th>参考价</th></tr>
+        <tr><td>市中心</td><td>喷水池 / 大十字附近</td><td>¥300–500</td></tr>
+        <tr><td>性价比</td><td>花果园 / 观山湖区</td><td>¥200–350</td></tr>
+      </table>
+      <blockquote>住喷水池附近，去哪都方便。</blockquote>
+
+      <h4>🌙 贵阳夜市</h4>
+      <table class="mini-table">
+        <tr><th>夜市</th><th>必吃</th></tr>
+        <tr><td>青云路夜市</td><td>丝娃娃、肠旺面、烤脑花</td></tr>
+        <tr><td>二七路小吃街</td><td>集中式小吃一条街</td></tr>
+      </table>
+
+      <div class="drive-note">🚗 黄果树 → 贵阳 约 1.5h | 全程最轻松</div>
+
+      <div class="day-nav">
+        <button onclick="switchTab('d4')">← Day 4</button>
+        <button onclick="switchTab('d6')">Day 6 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL: Day 6 ═══════════ -->
+  <div class="tab-panel" id="tab-d6">
+    <div class="day-panel">
+      <div class="day-panel-header">
+        <span class="day-num">Day 6</span>
+        <span class="day-date">10/1 周四</span>
+        <span class="day-title">🛶 南江大峡谷漂流</span>
+        <span class="day-tag">户外</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-row"><span class="tl-time">8:00</span><span class="tl-desc">贵阳 → 南江大峡谷（约 1h）</span></div>
+        <div class="tl-row"><span class="tl-time">9:00–12:30</span><span class="tl-desc">🛶 漂流（约 3h）+ 峡谷栈道</span></div>
+        <div class="tl-row"><span class="tl-time">13:00</span><span class="tl-desc">午饭</span></div>
+        <div class="tl-row"><span class="tl-time">14:00–15:00</span><span class="tl-desc">🚗 返回贵阳</span></div>
+        <div class="tl-row"><span class="tl-time">下午–晚上</span><span class="tl-desc">🏙️ 贵阳市区：甲秀楼 → 黔灵山 → 夜市</span></div>
+      </div>
+
+      <h4>南江大峡谷</h4>
+      <ul>
+        <li>漂流全长约 8km，约 2–3h，有激流有平缓段，水质清，两岸峡谷</li>
+        <li>不想再湿身就走悬崖栈道，峡谷风光同样震撼</li>
+        <li>套票约 ¥180–220/人</li>
+        <li>10/1 人多但漂流有批次限制，不会像景区那么挤</li>
+        <li>提前一天网上买票</li>
+      </ul>
+
+      <h4>🌙 下午回贵阳后</h4>
+      <ul>
+        <li><strong>甲秀楼</strong> — 贵阳地标，傍晚亮灯后最好看</li>
+        <li><strong>黔灵山公园</strong> — ¥5 门票，猴子满山跑，弘福寺</li>
+        <li><strong>青云路/二七路夜市</strong> — 国庆狂欢夜</li>
+      </ul>
+
+      <h4>🏨 贵阳住宿</h4>
+      <p style="font-size:0.9rem;color:var(--muted);">同前一天酒店，连住两晚不折腾。</p>
+
+      <blockquote>⚠️ 提前一天确认南江大峡谷国庆是否开放漂流，如遇停漂则改为市区深度游。</blockquote>
+
+      <div class="day-nav">
+        <button onclick="switchTab('d5')">← Day 5</button>
+        <button onclick="switchTab('d7')">Day 7 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL: Day 7 ═══════════ -->
+  <div class="tab-panel" id="tab-d7">
+    <div class="day-panel">
+      <div class="day-panel-header">
+        <span class="day-num">Day 7</span>
+        <span class="day-date">10/2 周五</span>
+        <span class="day-title">🏛️ 贵阳收尾 · 返程</span>
+        <span class="day-tag">博物馆</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-row"><span class="tl-time">上午</span><span class="tl-desc">睡到自然醒 → 🏛️ <strong>贵州省博物馆</strong>（2h）</span></div>
+        <div class="tl-row"><span class="tl-time">午饭</span><span class="tl-desc">🍜 贵阳最后一顿：牛肉粉 / 肠旺面 / 丝娃娃任选</span></div>
+        <div class="tl-row"><span class="tl-time">下午</span><span class="tl-desc">市区闲逛，买点伴手礼（但香酥鸭、脆哨）</span></div>
+        <div class="tl-row"><span class="tl-time">16:00–17:00</span><span class="tl-desc">前往机场（市区过去约 30min），还车</span></div>
+        <div class="tl-row"><span class="tl-time">20:00</span><span class="tl-desc">✈️ 贵阳 → 温州 🏠</span></div>
+      </div>
+
+      <h4>🏛️ 贵州省博物馆（免费，需预约）</h4>
+      <ul>
+        <li><strong>民族贵州展厅</strong> — 苗族银饰、侗族鼓楼、布依蜡染，把前几天看到的苗寨文化串起来</li>
+        <li><strong>古生物王国展厅</strong> — 贵州是古生物化石大省，海百合、贵州龙化石</li>
+        <li><strong>历史贵州展厅</strong> — 从夜郎古国到土司文化</li>
+        <li>公众号「贵州省博物馆」提前一天预约，刷身份证进</li>
+        <li>预计 1.5–2h，刚好不累</li>
+      </ul>
+
+      <blockquote>💡 最后一天的博物馆反而最适合收尾——前六天看了山、水、寨、瀑、洞，最后用博物馆把贵州的文化脉络串一遍，体验完整。</blockquote>
+
+      <h4>🍜 贵阳最后一顿</h4>
+      <table class="mini-table">
+        <tr><th>推荐</th><th>菜</th><th>人均</th></tr>
+        <tr><td>南门口肠旺面</td><td>肠旺面 + 脆哨</td><td>¥20</td></tr>
+        <tr><td>老凯里酸汤鱼</td><td>酸汤鱼（如果前面没吃够）</td><td>¥80</td></tr>
+        <tr><td>丝恋红汤丝娃娃</td><td>丝娃娃（连锁品质稳）</td><td>¥50</td></tr>
+        <tr><td>但家香酥鸭</td><td>香酥鸭（可外带伴手礼）</td><td>¥30</td></tr>
+      </table>
+
+      <blockquote>🛍️ <strong>伴手礼：</strong>但家香酥鸭、脆哨（丁家脆哨）、刺梨干，都是贵阳特产，机场也能买。</blockquote>
+
+      <div class="drive-note">🚗 贵阳市区 → 机场 约 30min | 还车预留 15min 手续时间 | 提前 1.5h 到机场足够</div>
+
+      <div class="day-nav">
+        <button onclick="switchTab('d6')">← Day 6</button>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PANEL: 吃住行 ═══════════ -->
+  <div class="tab-panel" id="tab-info">
+
+    <div class="info-section">
+      <h2>🍜 每站必吃清单</h2>
+      <table class="mini-table">
+        <tr><th>城市</th><th>必吃</th><th>亮点</th></tr>
+        <tr><td>🏯 镇远</td><td>豆花烤鱼、道菜扣肉</td><td>两人一条鱼刚好</td></tr>
+        <tr><td>⛰️ 梵净山</td><td>社饭、江口米豆腐</td><td>山脚寨子吃</td></tr>
+        <tr><td>🏘️ 西江</td><td>酸汤牛肉、腊肉、糍粑</td><td>火锅两个人很爽</td></tr>
+        <tr><td>💧 荔波</td><td>酸肉、竹筒饭、冰粉</td><td></td></tr>
+        <tr><td>🌊 安顺</td><td><strong>夺夺粉、裹卷、烤小肠</strong></td><td>🏆 此行最佳夜市</td></tr>
+        <tr><td>🏙️ 贵阳</td><td>丝娃娃、肠旺面、青岩卤猪脚、牛肉粉</td><td>遍地都是</td></tr>
+      </table>
+    </div>
+
+    <div class="info-section">
+      <h2>🚗 自驾信息</h2>
+      <table class="mini-table">
+        <tr><th>路段</th><th>时长</th><th>高速费约</th></tr>
+        <tr><td>贵阳机场 → 镇远</td><td>3h</td><td>¥80</td></tr>
+        <tr><td>镇远 → 梵净山</td><td>1.5h</td><td>¥40</td></tr>
+        <tr><td>梵净山 → 西江</td><td>2.5h</td><td>¥70</td></tr>
+        <tr><td>西江 → 荔波</td><td>3.5h</td><td>¥90</td></tr>
+        <tr><td>荔波 → 安顺</td><td>4h</td><td>¥100</td></tr>
+        <tr><td>安顺 → 黄果树</td><td>40min</td><td>¥15</td></tr>
+        <tr><td>黄果树 → 贵阳</td><td>1.5h</td><td>¥50</td></tr>
+        <tr><td>贵阳 → 南江大峡谷</td><td>1h</td><td>¥25</td></tr>
+        <tr><td>贵阳市区 → 机场</td><td>30min</td><td>—</td></tr>
+      </table>
+    </div>
+
+    <div class="info-section">
+      <h2>💰 费用估算（每人）</h2>
+      <div class="cost-grid">
+        <span class="label">往返机票</span><span class="val">¥1,200–1,800</span>
+        <span class="label">租车 + 油费 + 高速</span><span class="val">¥1,000–1,300</span>
+        <span class="label">住宿 6 晚</span><span class="val">¥800–1,200</span>
+        <span class="label">门票 + 漂流</span><span class="val">¥700–900</span>
+        <span class="label">餐饮</span><span class="val">¥600–800</span>
+        <span class="cost-total label">合计（人均）</span><span class="cost-total val">¥4,300–5,700</span>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h2>⚠️ 关键提醒</h2>
+      <div class="warn-box">
+        <h4>🔥 必须提前做的事</h4>
+        <ul class="checklist">
+          <li><strong>梵净山门票</strong> — 9/24 早上 7:00 准时抢（微信「梵净山生态旅游区」）</li>
+          <li><strong>大小七孔门票</strong> — 提前 1–3 天官网/携程买</li>
+          <li><strong>黄果树门票</strong> — 提前 1–3 天买，选最早时段</li>
+          <li><strong>漂流确认</strong> — 9/30 前确认南江大峡谷国庆是否开放</li>
+        </ul>
+      </div>
+      <div class="warn-box" style="margin-top:12px;">
+        <h4>🧳 装备清单</h4>
+        <ul class="checklist">
+          <li>薄冲锋衣/卫衣 — 梵净山山顶风大、温度低 5℃</li>
+          <li>雨衣 — 黄果树大瀑布水帘洞必湿</li>
+          <li>能踩水的鞋 — 大小七孔水上森林要涉水</li>
+          <li>防晒 + 驱蚊</li>
+          <li>随身充电宝（山上没有充电的地方）</li>
+        </ul>
+      </div>
+      <div class="warn-box" style="margin-top:12px;">
+        <h4>🚗 租车建议</h4>
+        <ul>
+          <li>建议 SUV — 贵州高速弯多坡多，SUV 坐着舒服</li>
+          <li>两人换着开，特别是荔波→安顺（4h）那一段</li>
+          <li>提前在租车平台（神州/一嗨）预定，机场取还</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-note">📝 各站细节待逐日补充 · 持续打磨中</div>
+
+</div>
+
+<script>
+function switchTab(tabId) {
+  // Deactivate all
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  // Activate target
+  var btn = document.querySelector('[data-tab="' + tabId + '"]');
+  var panel = document.getElementById('tab-' + tabId);
+  if (btn) btn.classList.add('active');
+  if (panel) panel.classList.add('active');
+  // Scroll to top of content
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Tab button clicks
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    switchTab(this.dataset.tab);
+  });
+});
+</script>
+
+</body>
+</html>
